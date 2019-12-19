@@ -1,0 +1,66 @@
+---
+title: "TheMightyClaw"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r cars}
+library(moderndive)
+library(tidyverse)
+library(readxl)
+library(stats)
+library(knitr)
+library(corrplot)
+library(PerformanceAnalytics)
+library(plotly)
+library(ggthemes)
+# library(rJava)
+# library(tabulizerjars)
+# library(tabulizer)
+```
+
+## Setup
+
+```{r pressure, echo=FALSE}
+pincingforce <- read_excel("C:/Users/antbru/OneDrive - eVestment/New folder/Temp/Emory/Adv Mgr Econ/Might Claw Table 1.xlsx")
+
+sarcomere <- read_excel("C:/Users/antbru/OneDrive - eVestment/New folder/Temp/Emory/Adv Mgr Econ/Might Claw Table 2.xlsx")
+
+```
+
+##Data Wrangling
+
+```{r}
+
+pincingforce$logpincingforce <- log10(pincingforce$`Pinching force(kgf)`)
+pincingforce$logbw <- log10(pincingforce$`BW (g)`)
+
+```
+
+##Scatter
+
+```{r}
+
+clawscatter <-
+  ggplot(pincingforce, aes(x = logbw, y = logpincingforce, color = Sex)) +
+  geom_point() +
+  # geom_smooth(method = "lm"
+  stat_smooth(method = "lm") + 
+  stat_smooth(data=subset(pincingforce,Sex =="F"),
+                                  method = "lm", se = T) +
+  stat_smooth(data=subset(pincingforce,Sex =="M"),
+                                  method = "lm", se = T) +
+  theme_economist()
+
+
+ggplotly(clawscatter)
+
+```
+
+
+
